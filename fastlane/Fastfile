@@ -49,4 +49,81 @@ platform :ios do
 	#   slack_url: ENV['SLACK_URL']
 	# )
   # end
+
+  lane :produce_app do
+    produce(
+      username: '뭐가 들어가야 할까요?',
+      app_identifier: 'com.tnzkm.GongGanGam',
+      app_name: 'GongGanGam',
+      language: 'Korea',
+      app_version: '1.0',
+      # sku: '123',
+      team_name: 'GongGanGam-Team', # only necessary when in multiple teams
+  
+      # Optional
+      # App services can be enabled during app creation
+      enable_services: {
+        access_wifi: "on",                        # Valid values: "on", "off"
+        app_attest: "on",                         # Valid values: "on", "off"
+        app_group: "on",                          # Valid values: "on", "off"
+        apple_pay: "off",                          # Valid values: "on", "off"
+        associated_domains: "off",                 # Valid values: "on", "off"
+        auto_fill_credential: "off",               # Valid values: "on", "off"
+        car_play_audio_app: "off",                 # Valid values: "on", "off"
+        car_play_messaging_app: "off",             # Valid values: "on", "off"
+        car_play_navigation_app: "off",            # Valid values: "on", "off"
+        car_play_voip_calling_app: "off",          # Valid values: "on", "off"
+        class_kit: "off",                          # Valid values: "on", "off"
+        icloud: "off",              # Valid values: "xcode5_compatible", "xcode6_compatible", "off"
+        critical_alerts: "off",                    # Valid values: "on", "off"
+        custom_network_protocol: "off",            # Valid values: "on", "off"
+        data_protection: "complete",              # Valid values: "complete", "unlessopen", "untilfirstauth", "off"
+        extended_virtual_address_space: "off",     # Valid values: "on", "off"
+        file_provider_testing_mode: "off",         # Valid values: "on", "off"
+        fonts: "on",                              # Valid values: "on", "off"
+        game_center: "ios",                       # Valid values: "ios", "macos", off"
+        health_kit: "off",                         # Valid values: "on", "off"
+        hls_interstitial_preview: "off",           # Valid values: "on", "off"
+        home_kit: "off",                           # Valid values: "on", "off"
+        hotspot: "off",                            # Valid values: "on", "off"
+        hotspot_helper: "off",                     # Valid values: "on", "off"
+        in_app_purchase: "off",                    # Valid values: "on", "off"
+        inter_app_audio: "off",                    # Valid values: "on", "off"
+        low_latency_hls: "off",                    # Valid values: "on", "off"
+        managed_associated_domains: "off",         # Valid values: "on", "off"
+        maps: "off",                               # Valid values: "on", "off"
+        multipath: "off",                          # Valid values: "on", "off"
+        network_extension: "on",                  # Valid values: "on", "off"
+        nfc_tag_reading: "off",                    # Valid values: "on", "off"
+        passbook: "off",                           # Valid values: "on", "off" (deprecated)
+        personal_vpn: "off",                       # Valid values: "on", "off"
+        push_notification: "on",                  # Valid values: "on", "off"
+        sign_in_with_apple: "on",                 # Valid values: "on", "off"
+        siri_kit: "off",                           # Valid values: "on", "off"
+        system_extension: "off",                   # Valid values: "on", "off"
+        user_management: "on",                    # Valid values: "on", "off"
+        vpn_configuration: "off",                  # Valid values: "on", "off" (deprecated)
+        wallet: "off",                             # Valid values: "on", "off"
+        wireless_accessory: "off",                 # Valid values: "on", "off"
+        driver_kit: "off",                         # Valid values: "on", "off"
+        driver_kit_endpoint_security: "off",       # Valid values: "on", "off"
+        driver_kit_family_hid_device: "off",       # Valid values: "on", "off"
+        driver_kit_family_networking: "off",       # Valid values: "on", "off"
+        driver_kit_family_serial: "off",           # Valid values: "on", "off"
+        driver_kit_hid_event_service: "off",       # Valid values: "on", "off"
+        driver_kit_transport_hid: "off",           # Valid values: "on", "off"
+        multitasking_camera_access: "on",         # Valid values: "on", "off"
+        sf_universal_link_api: "off",              # Valid values: "on", "off"
+        vp9_decoder: "off",                        # Valid values: "on", "off"
+        music_kit: "off",                          # Valid values: "on", "off"
+        shazam_kit: "off",                         # Valid values: "on", "off"
+        communication_notifications: "off",        # Valid values: "on", "off"
+        group_activities: "off",                   # Valid values: "on", "off"
+        health_kit_estimate_recalibration: "off",  # Valid values: "on", "off"
+        time_sensitive_notifications: "off",       # Valid values: "on", "off"
+      }
+    )
+  
+    deliver
+  end
 end
