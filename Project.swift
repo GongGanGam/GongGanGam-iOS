@@ -31,12 +31,42 @@ protocol ProjectFactory {
 final class BaseProjectFactory: ProjectFactory {
     var projectName: String = "GongGanGam"
     
-    var dependencies: [TargetDependency] = [
+    let dependencies: [TargetDependency] = [
+        .external(name: "RxFlow"),
         .external(name: "RxSwift"),
         .external(name: "RxCocoa"),
         .external(name: "RxRelay"),
         .external(name: "RxGesture"),
+        .external(name: "FlexLayout"),
+        .external(name: "Kingfisher"),
+        .external(name: "ReactorKit")
     ]
+    
+    var mainTarget: Target {
+        Target(
+            name: projectName,
+            platform: .iOS,
+            product: .app,
+            bundleId: "com.tnzkm.\(projectName)",
+            deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+            infoPlist: .extendingDefault(with: infoPlist),
+            sources: ["\(projectName)/\(projectName)/Sources/**"],
+            resources: "\(projectName)/\(projectName)/Resources/**",
+            dependencies: dependencies
+        )
+    }
+    
+    var kitTarget: Target {
+        Target(
+            name: "\(projectName)-Kit",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "com.tnzkm.\(projectName)-Kit",
+            deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+            infoPlist: .default,
+            sources: ["\(projectName)/\(projectName)-Kit/Sources/**"]
+        )
+    }
     
     let infoPlist: [String: InfoPlist.Value] = [
         "CFBundleShortVersionString": "1.0",
@@ -69,34 +99,13 @@ final class BaseProjectFactory: ProjectFactory {
 
     
     func generateTarget() -> [Target] {
-        [
-            Target(
-                name: projectName,
-                platform: .iOS,
-                product: .app,
-                bundleId: "com.tnzkm.\(projectName)",
-                deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
-                infoPlist: .extendingDefault(with: infoPlist),
-                sources: ["\(projectName)/Sources/**"],
-                resources: "\(projectName)/Resources/**",
-                entitlements: "\(projectName).entitlements",
-                scripts: [
-//                    .pre(path: "Scripts/SwiftLintRunScript.sh", arguments: [], name: "SwiftLint"),
-//                    .pre(path: "Scripts/UpdatePackageRunScript.sh", arguments: [], name: "OpenSource")
-                ],
-                dependencies: dependencies
-//                environment: [
-//                    "use_fake_repository": "false",
-//                    "is_succeed_case": "false"
-//                ]
-            ),
-        ]
+        return [mainTarget, kitTarget]
     }
     
     func generateConfigurations() -> Settings {
         return Settings.settings(configurations: [
-            .debug(name: "Debug", xcconfig: .relativeToRoot("\(projectName)/Sources/Config/Debug.xcconfig")),
-            .release(name: "Release", xcconfig: .relativeToRoot("\(projectName)/Sources/Config/Release.xcconfig")),
+            .debug(name: "Debug", xcconfig: .relativeToRoot("\(projectName)/\(projectName)/Sources/Config/Debug.xcconfig")),
+            .release(name: "Release", xcconfig: .relativeToRoot("\(projectName)/\(projectName)/Sources/Config/Release.xcconfig")),
         ])
     }
 }
