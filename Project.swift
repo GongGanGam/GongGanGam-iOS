@@ -50,8 +50,8 @@ final class BaseProjectFactory: ProjectFactory {
             bundleId: "com.tnzkm.\(projectName)",
             deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
             infoPlist: .extendingDefault(with: infoPlist),
-            sources: ["\(projectName)/\(projectName)/Sources/**"],
-            resources: "\(projectName)/\(projectName)/Resources/**",
+            sources: ["\(projectName)/Sources/**"],
+            resources: "\(projectName)/Resources/**",
             dependencies: dependencies
         )
     }
@@ -104,8 +104,8 @@ final class BaseProjectFactory: ProjectFactory {
     
     func generateConfigurations() -> Settings {
         return Settings.settings(configurations: [
-            .debug(name: "Debug", xcconfig: .relativeToRoot("\(projectName)/\(projectName)/Sources/Config/Debug.xcconfig")),
-            .release(name: "Release", xcconfig: .relativeToRoot("\(projectName)/\(projectName)/Sources/Config/Release.xcconfig")),
+            .debug(name: "Debug", xcconfig: .relativeToRoot("\(projectName)/Sources/Config/Debug.xcconfig")),
+            .release(name: "Release", xcconfig: .relativeToRoot("\(projectName)/Sources/Config/Release.xcconfig")),
         ])
     }
 }
