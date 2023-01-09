@@ -39,7 +39,15 @@ final class BaseProjectFactory: ProjectFactory {
         .external(name: "RxGesture"),
         .external(name: "FlexLayout"),
         .external(name: "Kingfisher"),
-        .external(name: "ReactorKit")
+        .external(name: "ReactorKit"),
+        .target(name: "GongGanGam-Kit"),
+        .target(name: "GongGanGam-Network"),
+        .target(name: "TokenManager"),
+    ]
+    
+    let networkDependencies: [TargetDependency] = [
+        .external(name: "RxSwift"),
+        .target(name: "TokenManager")
     ]
     
     var mainTarget: Target {
@@ -64,7 +72,32 @@ final class BaseProjectFactory: ProjectFactory {
             bundleId: "com.tnzkm.\(projectName)-Kit",
             deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
             infoPlist: .default,
-            sources: ["\(projectName)/\(projectName)-Kit/Sources/**"]
+            sources: ["\(projectName)-Kit/Sources/**"]
+        )
+    }
+    
+    var networkKitTarget: Target {
+        Target(
+            name: "\(projectName)-Network",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "com.tnzkm.\(projectName)-Network",
+            deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+            infoPlist: .default,
+            sources: ["\(projectName)-Network/Sources/**"],
+            dependencies: networkDependencies
+        )
+    }
+    
+    var tokenManagerTarget: Target {
+        Target(
+            name: "TokenManager",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "com.tnzkm.TokenManager",
+            deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+            infoPlist: .default,
+            sources: ["TokenManager/Sources/**"]
         )
     }
     
@@ -99,7 +132,7 @@ final class BaseProjectFactory: ProjectFactory {
 
     
     func generateTarget() -> [Target] {
-        return [mainTarget, kitTarget]
+        return [mainTarget, kitTarget, networkKitTarget, tokenManagerTarget]
     }
     
     func generateConfigurations() -> Settings {
