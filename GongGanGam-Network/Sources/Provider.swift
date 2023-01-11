@@ -13,7 +13,9 @@ import RxSwift
 import TokenManager
 
 public protocol Provider: AnyObject {
-    func request<T: Decodable>(_ urlRequest: URLRequest) -> Single<T>
+    
+    func request<T: Decodable>(endpoint: Endpoint, intercepter: RequestInterceptor?) -> Single<T>
+    func request<T: Decodable>(_ urlRequest: URLRequest, intercepter: RequestInterceptor?) -> Single<T>
 }
 
 
@@ -21,35 +23,42 @@ final class ProviderImpl: Provider {
     
     // MARK: Properties
     private let session: URLSession
-    private let tokenManager: TokenManager
+    
+    static let `default` = ProviderImpl()
 
     // MARK: Initializers
-    init(tokenManager: TokenManager) {
+    init() {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 10
         configuration.timeoutIntervalForResource = 10
         self.session = URLSession(configuration: configuration)
-        self.tokenManager = tokenManager
     }
     
     // MARK: Methods
-    func request<T: Decodable>(_ urlRequest: URLRequest) -> Single<T> {
+    func request<T: Decodable>(endpoint: Endpoint, intercepter: RequestInterceptor? = nil) -> Single<T> {
+        guard let req = try? endpoint.toURLRequest() else { return Single.error(NetworkError.invalidURL) }
+        
+        var requestUrl = req
+        
+        if let intercepter {
+            requestUrl = intercepter.adapt(request: requestUrl)
+        }
+        
+        return self.request(requestUrl, intercepter: intercepter)
+    }
+    
+    func request<T: Decodable>(_ urlRequest: URLRequest, intercepter: RequestInterceptor? = nil) -> Single<T> {
+        
         return self.session.rx.response(request: urlRequest)
             .catch({ err in
-                guard case let RxCocoaURLError.httpRequestFailed(response, _) = err else { return Observable.error(err) }
-                if response.statusCode == 401 {
-                    return self.retry(urlRequest: urlRequest)
+                if let intercepter {
+                    return intercepter.retry(error: err, urlRequest: urlRequest)
                 }
-                return Observable.error(err)
+                return .error(err)
             })
             .map { $0.data }
             .decode(type: T.self, decoder: JSONDecoder())
             .asSingle()
     }
     
-    private func retry(urlRequest: URLRequest) -> Observable<(response: HTTPURLResponse, data: Data)> {
-        guard let refreshToken = tokenManager.getToken(with: .refreshToken) else { return .error(NetworkError.noTokenError) }
-        
-        
-    }
 }
