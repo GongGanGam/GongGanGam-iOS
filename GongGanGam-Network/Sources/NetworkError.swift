@@ -13,4 +13,5 @@ enum NetworkError: LocalizedError {
     case invalidStatusCode(Int)
     case decodeError
     case noTokenError
+    case invalidURL
 }

@@ -9,8 +9,7 @@
 import Foundation
 
 public enum KeychainAccount: String {
-    case userId = "com.tnzkm.keychain.userId"
     case fcmToken = "com.tnzkm.keychain.fcmToken"
     case refreshToken = "com.tnzkm.keychain.refreshToken"
-    case auth = "com.tnzkm.keychain.firauth"
+    case accessToken = "com.tnzkm.keychain.accessToken"
 }
