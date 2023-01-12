@@ -60,8 +60,8 @@ extension URL {
     func appendingQueries(at parameter: HTTPRequestParameter?) -> URL? {
         var components = URLComponents(string: self.absoluteString)
         if case .query(let queries) = parameter {
-            let queries2 = components?.queryItems ?? []
-            components?.queryItems = queries2 + queries.map { URLQueryItem(name: $0, value: $1) }
+            let targetQueries = components?.queryItems ?? []
+            components?.queryItems = targetQueries + queries.map { URLQueryItem(name: $0, value: $1) }
         }
         return components?.url
     }
