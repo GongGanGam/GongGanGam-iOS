@@ -10,7 +10,6 @@ import Foundation
 
 import RxCocoa
 import RxSwift
-import TokenManager
 
 public protocol Provider: AnyObject {
     
