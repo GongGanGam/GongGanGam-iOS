@@ -50,15 +50,14 @@ final class ProviderImpl: Provider {
     func request<T: Decodable>(_ urlRequest: URLRequest, intercepter: RequestInterceptor? = nil) -> Single<T> {
         
         return self.session.rx.response(request: urlRequest)
+            .map { $0.data }
+            .decode(type: T.self, decoder: JSONDecoder())
+            .asSingle()
             .catch({ err in
                 if let intercepter {
                     return intercepter.retry(error: err, urlRequest: urlRequest)
                 }
                 return .error(err)
             })
-            .map { $0.data }
-            .decode(type: T.self, decoder: JSONDecoder())
-            .asSingle()
     }
-    
 }

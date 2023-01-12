@@ -47,7 +47,6 @@ public struct MultipartFormData {
         
         formData.data = formData.data
             .appending(boundaryData)
-
             .appending("Content-Disposition: form-data; name=\"\(name)\"; filename=\"GongGanGam\(UUID().uuidString).jpeg\"")
             .appendingLineBreak()
             .appending("Content-Type: image/jpeg")
