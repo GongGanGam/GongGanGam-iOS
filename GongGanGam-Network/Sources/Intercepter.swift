@@ -14,11 +14,13 @@ typealias AcesstokenPusher = RequestAdapter
 typealias TokenRefresher = RequestRetrier
 
 public protocol RequestAdapter {
+    
     func adapt(request: URLRequest) -> URLRequest
 }
 
 public protocol RequestRetrier {
-    func retry(error: Error, urlRequest: URLRequest) -> Observable<(response: HTTPURLResponse, data: Data)>
+
+    func retry<T: Decodable>(error: Error, urlRequest: URLRequest) -> Single<T>
 }
 
 public protocol RequestInterceptor: RequestAdapter, RequestRetrier {}
@@ -29,7 +31,7 @@ extension RequestInterceptor {
         return request
     }
     
-    public func retry(error: Error, urlRequest: URLRequest) -> Observable<(response: HTTPURLResponse, data: Data)> {
-        return Observable.error(error)
+    public func retry<T: Decodable>(error: Error, urlRequest: URLRequest) -> Single<T> {
+        return Single.error(error)
     }
 }
