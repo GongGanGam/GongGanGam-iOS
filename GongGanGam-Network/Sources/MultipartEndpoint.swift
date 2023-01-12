@@ -18,7 +18,7 @@ import Foundation
 
 //TODO: 나중에 multipart 사용 간편하도록 endpoint 따로 구현해주기
 
-protocol MultipartEndpoint: Endpoint {
+public protocol MultipartEndpoint: Endpoint {
     var multipartFormData: MultipartFormData { get set }
     
     //TODO: toURLRequest를 강제로 만들게 하고 싶은데 어떻게 해야하지
