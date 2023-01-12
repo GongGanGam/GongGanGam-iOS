@@ -32,20 +32,6 @@ public protocol Endpoint {
     func toURLRequest() throws -> URLRequest
 }
 
-struct asd: Endpoint {
-    var baseURL: URL?
-    
-    var method: HTTPMethod
-    
-    var path: String
-    
-    var parameters: HTTPRequestParameter?
-    
-    var headers: HTTPHeaders {
-        return ["ajfzlvkdxm": sdofn]
-    }
-}
-
 public extension Endpoint {
     
     var headers: HTTPHeaders {
@@ -65,7 +51,7 @@ public extension Endpoint {
     }
 }
 
-private extension URL {
+extension URL {
     
     func appendingPath(path: String) -> URL? {
         return URL(string: path, relativeTo: self)
