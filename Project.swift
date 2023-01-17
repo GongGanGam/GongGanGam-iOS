@@ -42,6 +42,7 @@ final class BaseProjectFactory: ProjectFactory {
         .external(name: "ReactorKit"),
         .target(name: "GongGanGam-Kit"),
         .target(name: "GongGanGam-Network"),
+        .target(name: "GongGanGam-CoreData"),
         .target(name: "TokenManager"),
     ]
     
@@ -101,6 +102,19 @@ final class BaseProjectFactory: ProjectFactory {
         )
     }
     
+    var coreDataTarget: Target {
+        Target(
+            name: "\(projectName)-CoreData",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "com.tnzkm.\(projectName)-CoreData",
+            deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+            infoPlist: .default,
+            sources: ["\(projectName)-CoreData/Sources/**"],
+            coreDataModels: [CoreDataModel("\(projectName)-CoreData/Sources/Model.xcdatamodeld")]
+        )
+    }
+    
     let infoPlist: [String: InfoPlist.Value] = [
         "CFBundleShortVersionString": "1.0",
         "CFBundleVersion": "1",
@@ -132,7 +146,7 @@ final class BaseProjectFactory: ProjectFactory {
 
     
     func generateTarget() -> [Target] {
-        return [mainTarget, kitTarget, networkKitTarget, tokenManagerTarget]
+        return [mainTarget, kitTarget, networkKitTarget, tokenManagerTarget, coreDataTarget]
     }
     
     func generateConfigurations() -> Settings {
