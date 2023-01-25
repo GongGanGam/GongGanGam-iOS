@@ -42,6 +42,7 @@ final class BaseProjectFactory: ProjectFactory {
         .external(name: "ReactorKit"),
         .target(name: "GongGanGam-Kit"),
         .target(name: "GongGanGam-Network"),
+        .target(name: "GongGanGam-UI"),
         .target(name: "TokenManager"),
     ]
     
@@ -89,6 +90,20 @@ final class BaseProjectFactory: ProjectFactory {
         )
     }
     
+    var gongGanGamUITarget: Target {
+        Target(
+            name: "\(projectName)-UI",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "com.tnzkm.\(projectName)-UI",
+            deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+            infoPlist: .default,
+            sources: ["\(projectName)-UI/Sources/**"],
+            resources: ["\(projectName)-UI/Resources/**"],
+            dependencies: [.external(name: "FlexLayout"), .external(name: "PinLayout")]
+        )
+    }
+    
     var tokenManagerTarget: Target {
         Target(
             name: "TokenManager",
@@ -132,7 +147,7 @@ final class BaseProjectFactory: ProjectFactory {
 
     
     func generateTarget() -> [Target] {
-        return [mainTarget, kitTarget, networkKitTarget, tokenManagerTarget]
+        return [mainTarget, kitTarget, gongGanGamUITarget, networkKitTarget, tokenManagerTarget]
     }
     
     func generateConfigurations() -> Settings {
