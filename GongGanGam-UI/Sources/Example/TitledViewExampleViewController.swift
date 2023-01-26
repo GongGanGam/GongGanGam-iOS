@@ -22,7 +22,7 @@ final class TitledViewExampleViewController: UIViewController {
     }()
     
     lazy var titledSegmentedControl: TitledSegmentedControl = {
-        let view = TitledSegmentedControl()
+        let view = TitledSegmentedControl(subtitle: "성별을 선택해주세요.")
         
         view.titleLabel.text = "테스트"
         view.dataSource = self

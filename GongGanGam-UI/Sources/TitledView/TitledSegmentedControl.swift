@@ -24,10 +24,15 @@ open class TitledSegmentedControl: TitledView {
     // MARK: - Properties
     private let container = UIView()
     private var items = [UIButton]()
+    private var subtitle: String?
     
-    public var selectedIndex: Int?
+    /// 현재 선택된 Item의 index를 나타냅니다.
+    public private(set) var selectedIndex: Int?
     
+    /// `TitledSegmentedControl`의 이벤트를 수신할 수 있는 Delegate입니다.
     public weak var delegate: TitledSegmentedControlDelegate?
+    
+    /// `TitledSegmentedControl`의 데이터를 구성할 수 있는 DataSource입니다.
     public weak var dataSource: TitledSegmentedControlDataSource? {
         didSet {
             configureSegmentedItems()
@@ -47,7 +52,14 @@ open class TitledSegmentedControl: TitledView {
     public var selectedTextColor: UIColor = GongGanGamUIAsset.neutral10.color
     
     // MARK: - Initializers
-    public override init() {
+    
+    /// `TitledSegmentedControl`을 생성합니다.
+    ///
+    /// - Parameters:
+    ///   - subtitle: 부가 설명을 나타냅니다. `nil`일 경우 subtitle을 표시하지 않고, `nil`이 아닐 경우 subtitle을 표시합니다.
+    public init(subtitle: String? = nil) {
+        self.subtitle = subtitle
+        
         super.init()
     }
     
@@ -75,6 +87,11 @@ open class TitledSegmentedControl: TitledView {
             if let item = makeSegmentedItem(at: index) {
                 items.append(item)
             }
+        }
+        
+        if let subtitle {
+            subtitleLabel.text = subtitle
+            self.rootContainer.flex.addItem(subtitleLabel).marginTop(8)
         }
         
         self.rootContainer.flex.addItem(container)
