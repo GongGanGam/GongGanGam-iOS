@@ -31,3 +31,15 @@ public enum Pretendard {
     public static let button2 = GongGanGamUIFontFamily.Pretendard.regular.font(size: 14)
     public static let small = GongGanGamUIFontFamily.Pretendard.regular.font(size: 10)
 }
+
+public enum OmniGothic {
+    
+    // MARK: - 050 (Bold)
+    public static let h1050 = GongGanGamUIFontFamily._210OmniGothic._050.font(size: 22)
+    public static let h2050 = GongGanGamUIFontFamily._210OmniGothic._050.font(size: 20)
+    public static let h3050 = GongGanGamUIFontFamily._210OmniGothic._050.font(size: 17)
+    
+    // MARK: - 030 (Regular)
+    public static let h1030 = GongGanGamUIFontFamily._210OmniGothic._030.font(size: 22)
+    public static let h2030 = GongGanGamUIFontFamily._210OmniGothic._030.font(size: 20)
+}
