@@ -21,6 +21,15 @@ final class TitledViewExampleViewController: UIViewController {
         return view
     }()
     
+    lazy var titledSegmentedControl: TitledSegmentedControl = {
+        let view = TitledSegmentedControl()
+        
+        view.titleLabel.text = "테스트"
+        view.dataSource = self
+        view.delegate = self
+        return view
+    }()
+    
     // MARK: - Properties
     private let flexContainer = UIView()
     
@@ -40,7 +49,7 @@ final class TitledViewExampleViewController: UIViewController {
         self.view.backgroundColor = GongGanGamUIAsset.background.color
         self.view.addSubview(flexContainer)
         
-        flexContainer.flex.padding(12).addItem(titledTextField)
+        flexContainer.flex.padding(12).addItem(titledSegmentedControl)
     }
     
     override func viewDidLayoutSubviews() {
@@ -48,5 +57,26 @@ final class TitledViewExampleViewController: UIViewController {
         
         flexContainer.pin.all(self.view.pin.safeArea)
         flexContainer.flex.layout()
+    }
+}
+
+extension TitledViewExampleViewController: TitledSegmentedControlDelegate, TitledSegmentedControlDataSource {
+    
+    func titledSegmentedControl(_ segmentedControl: TitledSegmentedControl, titleForItemAt index: Int) -> String {
+        if index == 0 {
+            return "남자"
+        } else if index == 1 {
+            return "여자"
+        } else {
+            return "선택하지 않음"
+        }
+    }
+    
+    func titledSegmentedControl(_ segmentedControl: TitledSegmentedControl, didSelectItemAt index: Int) {
+        print(index)
+    }
+    
+    func numberOfItems(_ segmentedControl: TitledSegmentedControl) -> Int {
+        return 3
     }
 }
