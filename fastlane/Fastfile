@@ -20,8 +20,8 @@ platform :ios do
   lane :register_new_devices do
     register_devices(
       devices_file: "./fastlane/devices.txt",
-      team_id: "ABCDEFG"
     )
+    
   end
 
   desc "Get certificates"
@@ -34,12 +34,13 @@ platform :ios do
       in_house: false
     )
     
-    ENV['MATCH_GIT_PRIVATE_KEY'] = "https://github.com/chansooo/GongCert"
+    ENV['MATCH_GIT_PRIVATE_KEY'] = "https://github.com/chansooo/GongGanGamCert"
     sync_code_signing(
       type: "appstore",
       app_identifier: BundleId,
       readonly: false
     )
+    
   end
   
   # error do |lane, exception, options|

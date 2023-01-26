@@ -1,6 +1,6 @@
 app_identifier("com.tnzkm.GongGanGam") # The bundle identifier of your app
-apple_id("yy0867@gmail.com") # Your Apple Developer Portal username
+apple_id("kcs05008@naver.com") # Your Apple Developer Portal username
+username("kcs05008@naver.com")
 
-
-# For more information about the Appfile, see:
-#     https://docs.fastlane.tools/advanced/#appfile
+itc_team_id ("125934893")
+itc_team_name ("Chansoo Kim")
