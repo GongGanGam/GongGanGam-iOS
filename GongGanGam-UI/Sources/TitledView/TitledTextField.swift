@@ -102,7 +102,12 @@ private extension TitledTextField {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(textFieldDidBeginEditing),
                                                name: UITextField.textDidBeginEditingNotification,
-                                               object: nil)
+                                               object: self.textField)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(textFieldDidEndEditing),
+                                               name: UITextField.textDidEndEditingNotification,
+                                               object: self.textField)
     }
     
     @objc func textFieldDidBeginEditing() {
