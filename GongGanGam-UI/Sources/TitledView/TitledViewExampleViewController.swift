@@ -21,6 +21,15 @@ final class TitledViewExampleViewController: UIViewController {
         return view
     }()
     
+    lazy var titledPickerView: TitledPickerView = {
+        let view = TitledPickerView()
+        
+        view.titleLabel.text = "테스트-DatePicker"
+        view.placeholder = "출생년도를 선택해주세요."
+        view.pickerView.delegate = self
+        view.pickerView.dataSource = self
+    }
+
     lazy var titledSegmentedControl: TitledSegmentedControl = {
         let view = TitledSegmentedControl(subtitle: "성별을 선택해주세요.")
         
@@ -49,7 +58,11 @@ final class TitledViewExampleViewController: UIViewController {
         self.view.backgroundColor = GongGanGamUIAsset.background.color
         self.view.addSubview(flexContainer)
         
-        flexContainer.flex.padding(12).addItem(titledSegmentedControl)
+        flexContainer.flex.padding(12).define { flex in
+            flex.addItem(titledTextField)
+            flex.addItem(titledPickerView).marginTop(24)
+            flex.addItem(titledSegmentedControl).marginTop(24)
+        }
     }
     
     override func viewDidLayoutSubviews() {
