@@ -10,9 +10,6 @@ import UIKit
 import FlexLayout
 import PinLayout
 
-/**
- 
- */
 open class TitledPickerView: TitledView {
     
     // MARK: - UI
