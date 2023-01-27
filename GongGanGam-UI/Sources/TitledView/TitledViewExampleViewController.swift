@@ -28,7 +28,8 @@ final class TitledViewExampleViewController: UIViewController {
         view.placeholder = "출생년도를 선택해주세요."
         view.pickerView.delegate = self
         view.pickerView.dataSource = self
-    }
+        return view
+    }()
 
     lazy var titledSegmentedControl: TitledSegmentedControl = {
         let view = TitledSegmentedControl(subtitle: "성별을 선택해주세요.")
@@ -70,6 +71,25 @@ final class TitledViewExampleViewController: UIViewController {
         
         flexContainer.pin.all(self.view.pin.safeArea)
         flexContainer.flex.layout()
+    }
+}
+
+extension TitledViewExampleViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 50
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return "\(row + 1980)"
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        titledPickerView.text = "\(row + 1980)"
     }
 }
 
