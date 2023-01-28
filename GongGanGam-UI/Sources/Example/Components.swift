@@ -12,6 +12,7 @@ internal enum Components: String, CaseIterable {
     
     case titledView
     case alertBuilder
+    case selectionView
     
     var viewController: UIViewController {
         switch self {
@@ -19,6 +20,8 @@ internal enum Components: String, CaseIterable {
             return TitledViewExampleViewController()
         case.alertBuilder:
             return AlertBuilderExampleViewController()
+        case .selectionView:
+            return SelectionViewExampleViewController()
         }
     }
 }
