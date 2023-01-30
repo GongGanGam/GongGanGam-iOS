@@ -69,8 +69,3 @@ final class GGGInterceptor: RequestInterceptor {
     }
 
 }
-
-struct TokenDTO: Codable {
-    let refreshToken: String
-    let accessToken: String
-}
