@@ -16,12 +16,16 @@ internal enum Components: String, CaseIterable {
     
     case capsuleButton
     
+    case checkbox
+    
     var viewController: UIViewController {
         switch self {
         case .titledView:
             return TitledViewExampleViewController()
         case .alertBuilder:
             return AlertBuilderExampleViewController()
+        case .checkbox:
+            return CheckBoxExampleViewController()
         case .selectionView:
             return SelectionViewExampleViewController()
         case .capsuleButton:
