@@ -12,6 +12,11 @@ internal enum Components: String, CaseIterable {
     
     case titledView
     case alertBuilder
+    case selectionView
+    
+    case capsuleButton
+    
+    case checkbox
     
     case gongGanGamButton
     
@@ -21,9 +26,14 @@ internal enum Components: String, CaseIterable {
             return TitledViewExampleViewController()
         case .alertBuilder:
             return AlertBuilderExampleViewController()
-        
         case .gongGanGamButton:
             return GongGanGamButtonExampleViewController()
+        case .checkbox:
+            return CheckBoxExampleViewController()
+        case .selectionView:
+            return SelectionViewExampleViewController()
+        case .capsuleButton:
+            return CapsuleButtonExampleViewController()
         }
     }
 }
