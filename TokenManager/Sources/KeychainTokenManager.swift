@@ -13,6 +13,8 @@ public final class KeychainTokenManager: TokenManager {
     // MARK: - Properties
     private let securityClass = kSecClassGenericPassword
     
+    public init() {}
+    
     // MARK: - Methods
     public func getToken(with key: KeychainAccount) -> Token? {
         let query: [CFString: Any] = [
