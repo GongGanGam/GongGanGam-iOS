@@ -32,4 +32,12 @@ public class PersistenceService {
         }
         self.persistentContainer = container
     }
+    
+    // MARK: - Methods
+    public func fetch<T: NSManagedObject>(type: T.Type, predicate: NSPredicate? = nil) throws -> [T] {
+        let request = NSFetchRequest<T>(entityName: String(describing: T.self))
+        request.predicate = predicate
+        let fetchResult = try context.fetch(request)
+        return fetchResult
+    }
 }
