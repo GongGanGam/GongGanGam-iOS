@@ -22,6 +22,17 @@ extension ExDiaryEntity {
     @NSManaged public var content: String
     @NSManaged public var imgUrl: String
     @NSManaged public var shareAgreed: Bool
+    
+    public func toModel() -> ExDiaryDTO {
+        return ExDiaryDTO(
+            id: self.id,
+            date: self.date,
+            emoji: self.emoji,
+            content: self.content,
+            imgUrl: self.imgUrl,
+            isShared: self.shareAgreed
+        )
+    }
 }
 
 extension ExDiaryEntity : Identifiable {
