@@ -52,4 +52,14 @@ public class PersistenceService {
     public func update<T: EntityUpdatable>(entity: T) throws {
         try entity.update(at: self.context)
     }
+    
+    public func delete<T: NSManagedObject>(id: Int64, type: T.Type) throws {
+        let request = NSFetchRequest<T>(entityName: String(describing: T.self))
+        request.predicate = NSPredicate(format: "id = %@", NSNumber(value: id))
+        
+        guard let object = try self.context.fetch(request).first else { throw PersistenceError.invalidEntityId }
+        
+        try self.context.delete(object)
+        try self.context.save()
+    }
 }
