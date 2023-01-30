@@ -13,12 +13,10 @@ internal enum Components: String, CaseIterable {
     case titledView
     case alertBuilder
     case selectionView
-    
     case capsuleButton
-    
     case checkbox
-    
     case gongGanGamButton
+    case profileImageView
     
     var viewController: UIViewController {
         switch self {
@@ -34,6 +32,8 @@ internal enum Components: String, CaseIterable {
             return SelectionViewExampleViewController()
         case .capsuleButton:
             return CapsuleButtonExampleViewController()
+        case .profileImageView:
+            return ProfileImageExampleViewController()
         }
     }
 }
