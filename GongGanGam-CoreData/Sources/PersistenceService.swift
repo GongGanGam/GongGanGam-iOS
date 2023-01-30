@@ -40,4 +40,12 @@ public class PersistenceService {
         let fetchResult = try context.fetch(request)
         return fetchResult
     }
+    
+    @discardableResult
+    public func insert<T: EntityWritable>(entity: T) throws -> T {
+        
+        try entity.write(at: self.context)
+        try self.context.save()
+        return entity
+    }
 }
