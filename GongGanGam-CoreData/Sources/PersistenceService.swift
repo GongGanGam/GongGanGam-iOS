@@ -48,4 +48,8 @@ public class PersistenceService {
         try self.context.save()
         return entity
     }
+    
+    public func update<T: EntityUpdatable>(entity: T) throws {
+        try entity.update(at: self.context)
+    }
 }
