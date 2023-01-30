@@ -28,8 +28,8 @@ public class NetworkManager {
     // MARK: Initializers
     public init() {
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = 100
-        configuration.timeoutIntervalForResource = 100
+        configuration.timeoutIntervalForRequest = 10
+        configuration.timeoutIntervalForResource = 10
         self.session = URLSession(configuration: configuration)
     }
     
