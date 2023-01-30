@@ -18,6 +18,7 @@ internal enum Components: String, CaseIterable {
     case gongGanGamButton
     case profileImageView
     case receivedContentCell
+    case chatPreview
     
     var viewController: UIViewController {
         switch self {
@@ -37,6 +38,8 @@ internal enum Components: String, CaseIterable {
             return ProfileImageExampleViewController()
         case .receivedContentCell:
             return ReceivedContentCellExampleViewController()
+        case .chatPreview:
+            return ChatPreviewCellExampleViewController()
         }
     }
 }
