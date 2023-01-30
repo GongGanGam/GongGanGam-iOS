@@ -1,5 +1,5 @@
 //
-//  Intercepter.swift
+//  Interceptor.swift
 //  GongGanGam-Network
 //
 //  Created by kimchansoo on 2023/01/11.
