@@ -73,7 +73,8 @@ final class BaseProjectFactory: ProjectFactory {
             bundleId: "com.tnzkm.\(projectName)-Kit",
             deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
             infoPlist: .default,
-            sources: ["\(projectName)-Kit/Sources/**"]
+            sources: ["\(projectName)-Kit/Sources/**"],
+            coreDataModels: [CoreDataModel("\(projectName)-Kit/Sources/Data/GGGStore.xcdatamodeld")]
         )
     }
     
