@@ -51,6 +51,7 @@ public class PersistenceService {
     
     public func update<T: EntityUpdatable>(entity: T) throws {
         try entity.update(at: self.context)
+        try self.context.save()
     }
     
     public func delete<T: NSManagedObject>(id: Int64, type: T.Type) throws {

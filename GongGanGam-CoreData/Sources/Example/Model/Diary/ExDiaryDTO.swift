@@ -63,6 +63,5 @@ extension ExDiaryDTO: EntityUpdatable {
         object.setValue(self.content, forKey: "content")
         object.setValue(self.imgUrl, forKey: "imgUrl")
         object.setValue(self.isShared, forKey: "shareAgreed")
-        try context.save()
     }
 }
