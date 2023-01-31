@@ -111,7 +111,7 @@ final class BaseProjectFactory: ProjectFactory {
             deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["\(projectName)-CoreData/Sources/**"],
-            coreDataModels: [CoreDataModel("\(projectName)-CoreData/Sources/Model.xcdatamodeld")]
+            coreDataModels: [CoreDataModel("\(projectName)-CoreData/Sources/Example/ExStore.xcdatamodeld")]
         )
     }
     
