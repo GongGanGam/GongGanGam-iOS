@@ -9,7 +9,7 @@
 import Foundation
 
 struct DiaryRequestDTO {
-    let date: Date
+    let date: String
     let emoji: String
     let content: String
     let shareAgreed: Bool
