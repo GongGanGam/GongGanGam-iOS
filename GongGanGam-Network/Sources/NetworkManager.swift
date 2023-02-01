@@ -34,7 +34,10 @@ public class NetworkManager {
     }
     
     // MARK: Methods
-    public func request<T: Decodable>(endpoint: Endpoint, intercepter: RequestInterceptor? = nil) -> Single<T> {
+    public func request<T: Decodable>(
+        endpoint: Endpoint,
+        intercepter: RequestInterceptor? = nil
+    ) -> Single<T> {
         guard let req = try? endpoint.toURLRequest() else { return Single.error(NetworkError.invalidURL) }
         
         var requestUrl = req
@@ -50,7 +53,7 @@ public class NetworkManager {
         
         return self.session.rx.response(request: urlRequest)
             .map { res in
-                print(res)
+                print(res.response)
                 if (200...299) ~= res.response.statusCode {
                     return res.data
                 }
