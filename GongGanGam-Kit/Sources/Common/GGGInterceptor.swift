@@ -27,7 +27,11 @@ final class GGGInterceptor: RequestInterceptor {
         }
     }
     private var refreshToken: String? {
-        tokenManager.getToken(with: .refreshToken)
+        get { tokenManager.getToken(with: .refreshToken) }
+        set {
+            guard let newValue else { return }
+            tokenManager.save(token: newValue, with: .refreshToken)
+        }
     }
     
     // MARK: Initializers
@@ -48,7 +52,7 @@ final class GGGInterceptor: RequestInterceptor {
     }
     
     func retry<T>(error: Error, urlRequest: URLRequest) -> Single<T> where T : Decodable {
-        print("retry\n\n\n\n")
+        
         guard let error = error as? NetworkError,
               case .invalidStatusCode(let status) = error,
               status == 401,
