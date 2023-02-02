@@ -14,12 +14,12 @@ import RxSwift
 enum DiaryMultipartEndpoint: Endpoint {
     
     case create(dto: DiaryRequestDTO)
-    case edit(dto: DiaryRequestDTO, diaryId: String)
+    case edit(dto: DiaryRequestDTO, diaryId: Int64)
     
     // MARK: Properties
     
     var baseURL: URL? {
-        return URL.baseUrl?.appendingPathExtension("diary")
+        return URL.baseUrl?.appendingPathComponent("diary")
     }
     
     var method: HTTPMethod {
@@ -36,7 +36,7 @@ enum DiaryMultipartEndpoint: Endpoint {
         case .create:
             return nil
         case .edit(_, let diaryId):
-            return diaryId
+            return "\(diaryId)"
         }
     }
     
@@ -51,9 +51,8 @@ enum DiaryMultipartEndpoint: Endpoint {
         var formData = MultipartFormData()
         switch self {
         case let .create(dto):
-            let stringDate = dateToString(date: dto.date)
             formData = formData
-                .appending(stringDate, forKey: "date")
+                .appending(dto.date, forKey: "date")
                 .appending(dto.emoji, forKey: "emoji")
                 .appending(dto.content, forKey: "content")
                 .appending(dto.shareAgreed ? "true": "false" , forKey: "shareAgreed")
@@ -70,11 +69,16 @@ enum DiaryMultipartEndpoint: Endpoint {
     }
     
     private func configureURLRequest() throws -> URLRequest {
-        guard let baseURL,
-              let path
+        guard let baseURL
+//              let path
         else { throw NetworkError.invalidURL }
         
-        var request = URLRequest(url: baseURL.appendingPathExtension(path))
+        var url = baseURL
+        if let path {
+            url = url.appendingPathExtension(path)
+        }
+        
+        var request = URLRequest(url: url)
         
         for header in headers {
             request.setValue(header.value, forHTTPHeaderField: header.key)
