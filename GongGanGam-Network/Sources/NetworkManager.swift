@@ -39,7 +39,7 @@ public class NetworkManager {
         intercepter: RequestInterceptor? = nil
     ) -> Single<T> {
         guard let req = try? endpoint.toURLRequest() else { return Single.error(NetworkError.invalidURL) }
-        
+        print("urlrequest: \(req)")
         var requestUrl = req
         
         if let intercepter {
@@ -49,11 +49,14 @@ public class NetworkManager {
         return self.request(requestUrl, type: T.self, intercepter: intercepter)
     }
     
-    public func request<T: Decodable>(_ urlRequest: URLRequest, type: T.Type, intercepter: RequestInterceptor? = nil) -> Single<T> {
-        
+    public func request<T: Decodable>(
+        _ urlRequest: URLRequest,
+        type: T.Type,
+        intercepter: RequestInterceptor? = nil
+    ) -> Single<T> {    
         return self.session.rx.response(request: urlRequest)
             .map { res in
-                print(res.response)
+                print(res.data.prettyPrintedJSONString)
                 if (200...299) ~= res.response.statusCode {
                     return res.data
                 }
@@ -67,5 +70,15 @@ public class NetworkManager {
                 }
                 return .error(err)
             })
+    }
+}
+
+extension Data {
+    var prettyPrintedJSONString: NSString? { /// NSString gives us a nice sanitized debugDescription
+        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
+              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+              let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return nil }
+
+        return prettyPrintedString
     }
 }

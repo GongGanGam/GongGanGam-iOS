@@ -69,9 +69,7 @@ enum DiaryMultipartEndpoint: Endpoint {
     }
     
     private func configureURLRequest() throws -> URLRequest {
-        guard let baseURL
-//              let path
-        else { throw NetworkError.invalidURL }
+        guard let baseURL else { throw NetworkError.invalidURL }
         
         var url = baseURL
         if let path {
@@ -84,7 +82,6 @@ enum DiaryMultipartEndpoint: Endpoint {
             request.setValue(header.value, forHTTPHeaderField: header.key)
         }
         
-//        request.setValue("accessToken", forHTTPHeaderField: "1")
         return request
     }
     
