@@ -46,29 +46,37 @@ final public class DiaryRemoteDataSourceImpl: DiaryRemoteDataSource {
             image: imageData
         )
         let diaryEndpoint = DiaryMultipartEndpoint.create(dto: dto)
-        // swagger에서 status, code, message같은 애들이 추가적으로 붙는데 그 아이들을 DTO 자체에 포함을 시켜버릴지, 아니면 다른 처리(adaptor사용 등)를 통해서 처리를 할지
+        
         return networkManager.request(
             endpoint: diaryEndpoint,
             intercepter: self.interceptor
-        ).map { (dto: DiaryResponseDTO) -> Diary in
-            dto.toModel()
-        }
+        ).map { (dto: GenericDTO) -> DiaryResponseDTO in
+            return dto.data
+        }.map { $0.toModel() }
     }
     
     func fetchDetailDiary(diaryId: String) -> Single<Diary> {
         let endpoint = DiaryEndpoint.fetchDetail(diaryId: diaryId)
-        return networkManager.request(endpoint: endpoint)
-            .map { (dto: DiaryResponseDTO) -> Diary in
-                dto.toModel()
-            }
+        return networkManager.request(
+            endpoint: endpoint,
+            intercepter: self.interceptor
+        )
+        .debug("1")
+        .map { (dto: GenericDTO) -> DiaryResponseDTO in
+            return dto.data
+        }
+        .debug("2")
+        .map { $0.toModel() }
     }
     
     func fetchMonthlyDiary(year: Int, month: Int) -> Single<[Diary]> {
         let endpoint = DiaryEndpoint.fetchDiary(year: year, month: month)
-        return networkManager.request(endpoint: endpoint)
-            .map { (dtos: [DiaryResponseDTO]) -> [Diary] in
-                dtos.map { $0.toModel() }
-            }
+        return networkManager.request(
+            endpoint: endpoint,
+            intercepter: self.interceptor
+        ).map { (dto: GenericDTO) -> [DiaryResponseDTO] in
+            return dto.data
+        }.map { $0.map { $0.toModel() } }
     }
     
     func editDiary(diary: Diary, imageData: Data?) -> Single<Diary> {
@@ -81,11 +89,12 @@ final public class DiaryRemoteDataSourceImpl: DiaryRemoteDataSource {
             image: imageData
         )
         let endpoint = DiaryMultipartEndpoint.edit(dto: dto, diaryId: diaryId)
-        // 따로 받을 response가 없는데 해당 부분 어떻게 처리할지 고민해봐야할듯
-        return networkManager.request(endpoint: endpoint)
-            .map { (dto: DiaryResponseDTO) -> Diary in
-                dto.toModel()
-            }
+        return networkManager.request(
+            endpoint: endpoint,
+            intercepter: self.interceptor
+        ).map { (dto: GenericDTO) -> DiaryResponseDTO in
+            return dto.data
+        }.map { $0.toModel() }
     }
 
 }
