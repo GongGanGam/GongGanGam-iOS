@@ -10,4 +10,5 @@ import Foundation
 
 enum KitError: LocalizedError {
     case noIdError
+    case decodeError
 }
