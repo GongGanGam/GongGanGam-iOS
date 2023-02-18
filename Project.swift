@@ -37,17 +37,20 @@ final class BaseProjectFactory: ProjectFactory {
         .external(name: "RxCocoa"),
         .external(name: "RxRelay"),
         .external(name: "RxGesture"),
-        .external(name: "FlexLayout"),
         .external(name: "Kingfisher"),
         .external(name: "ReactorKit"),
+//        .external(name: "FlexLayout"),
+//        .external(name: "PinLayout"),
         .target(name: "GongGanGam-Kit"),
         .target(name: "GongGanGam-Network"),
+        .target(name: "GongGanGam-UI"),
         .target(name: "GongGanGam-CoreData"),
         .target(name: "TokenManager"),
     ]
     
     let networkDependencies: [TargetDependency] = [
         .external(name: "RxSwift"),
+        .external(name: "RxCocoa"),
         .target(name: "TokenManager")
     ]
     
@@ -61,7 +64,8 @@ final class BaseProjectFactory: ProjectFactory {
             infoPlist: .extendingDefault(with: infoPlist),
             sources: ["\(projectName)/Sources/**"],
             resources: "\(projectName)/Resources/**",
-            dependencies: dependencies
+            dependencies: dependencies,
+            settings: .settings(base: ["GCC_PREPROCESSOR_DEFINITIONS[arch=*]": "FLEXLAYOUT_SWIFT_PACKAGE=1"], configurations: [.debug(name: .debug)])
         )
     }
     
@@ -87,6 +91,29 @@ final class BaseProjectFactory: ProjectFactory {
             infoPlist: .default,
             sources: ["\(projectName)-Network/Sources/**"],
             dependencies: networkDependencies
+        )
+    }
+    
+    var gongGanGamUITarget: Target {
+        Target(
+            name: "\(projectName)-UI",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "com.tnzkm.\(projectName)-UI",
+            deploymentTarget: .iOS(targetVersion: "14.0", devices: [.iphone]),
+            infoPlist: .default,
+            sources: ["\(projectName)-UI/Sources/**"],
+            resources: ["\(projectName)-UI/Resources/**"],
+            dependencies: [
+                .package(product: "FlexLayout"),
+                .package(product: "PinLayout"),
+            ],
+            settings: .settings(
+                base: [
+                    "GCC_PREPROCESSOR_DEFINITIONS[arch=*]": "FLEXLAYOUT_SWIFT_PACKAGE=1",
+                ],
+                configurations: [.debug(name: .debug)]
+            )
         )
     }
     
@@ -146,7 +173,14 @@ final class BaseProjectFactory: ProjectFactory {
 
     
     func generateTarget() -> [Target] {
-        return [mainTarget, kitTarget, networkKitTarget, tokenManagerTarget, coreDataTarget]
+        return [
+            mainTarget,
+            kitTarget,
+            gongGanGamUITarget,
+            networkKitTarget,
+            tokenManagerTarget,
+            coreDataTarget
+        ]
     }
     
     func generateConfigurations() -> Settings {
@@ -163,6 +197,10 @@ let factory = BaseProjectFactory()
 let project: Project = .init(
     name: factory.projectName,
     organizationName: factory.projectName,
+    packages: [
+        .package(url: "https://github.com/layoutBox/FlexLayout.git", .upToNextMajor(from: "1.3.18")),
+        .package(url: "https://github.com/layoutBox/PinLayout.git", .branch("master")),
+    ],
     settings: factory.generateConfigurations(),
     targets: factory.generateTarget()
 )
