@@ -8,10 +8,11 @@
 
 import Foundation
 
-enum NetworkError: LocalizedError {
+public enum NetworkError: LocalizedError {
     case invalidResponse
     case invalidStatusCode(Int)
     case decodeError
     case noTokenError
     case invalidURL
+    case unknown
 }

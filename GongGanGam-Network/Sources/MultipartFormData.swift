@@ -42,7 +42,9 @@ public struct MultipartFormData {
         return formData
     }
     
-    public func appending(_ image: Data, forName name: String) -> MultipartFormData {
+    public func appending(_ image: Data?, forName name: String) -> MultipartFormData {
+        guard let image else { return self }
+        
         var formData = self
         
         formData.data = formData.data

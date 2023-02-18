@@ -26,7 +26,7 @@ public protocol Endpoint {
     var baseURL: URL? { get }
     var method: HTTPMethod { get }
     var headers: HTTPHeaders { get }
-    var path: String { get }
+    var path: String? { get }
     var parameters: HTTPRequestParameter? { get }
     
     func toURLRequest() throws -> URLRequest
@@ -47,14 +47,17 @@ public extension Endpoint {
     }
     
     private func configureURL() -> URL? {
-        return baseURL?.appendingPath(path: path)?.appendingQueries(at: parameters)
+        return self.baseURL?.appendingPath(path: path)?.appendingQueries(at: parameters)
     }
 }
 
 extension URL {
     
-    func appendingPath(path: String) -> URL? {
-        return URL(string: path, relativeTo: self)
+    func appendingPath(path: String?) -> URL? {
+        guard let path = path else { return self }
+        return self.appendingPathComponent(path)
+//        print(URL(string: path, relativeTo: self)?.absoluteString)
+//        return URL(string: path, relativeTo: self)
     }
     
     func appendingQueries(at parameter: HTTPRequestParameter?) -> URL? {

@@ -10,9 +10,6 @@ import Foundation
 
 import RxSwift
 
-typealias AcesstokenPusher = RequestAdapter
-typealias TokenRefresher = RequestRetrier
-
 public protocol RequestAdapter {
     
     func adapt(request: URLRequest) -> URLRequest
