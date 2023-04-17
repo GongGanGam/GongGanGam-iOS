@@ -142,6 +142,17 @@ final class BaseProjectFactory: ProjectFactory {
         )
     }
     
+    var unitTestTarget: Target {
+        Target(
+            name: "\(projectName)-Tests",
+            platform: .iOS,
+            product: .unitTests,
+            bundleId: "com.tnzkm.\(projectName)-Tests",
+            infoPlist: .default,
+            sources: ["\(projectName)-Tests/Sources/**"]
+        )
+    }
+    
     let infoPlist: [String: InfoPlist.Value] = [
         "CFBundleShortVersionString": "1.0",
         "CFBundleVersion": "1",
@@ -179,7 +190,8 @@ final class BaseProjectFactory: ProjectFactory {
             gongGanGamUITarget,
             networkKitTarget,
             tokenManagerTarget,
-            coreDataTarget
+            coreDataTarget,
+            unitTestTarget
         ]
     }
     
