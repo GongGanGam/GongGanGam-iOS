@@ -12,7 +12,7 @@
     {
       "identity" : "pinlayout",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/layoutBox/PinLayout",
+      "location" : "https://github.com/layoutBox/PinLayout.git",
       "state" : {
         "branch" : "master",
         "revision" : "f69f2506ee97977836c7a8a1ca7b5d4634bb7f36"
