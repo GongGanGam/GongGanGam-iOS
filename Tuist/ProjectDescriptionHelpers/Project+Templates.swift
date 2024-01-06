@@ -5,75 +5,113 @@ import ProjectDescription
 /// Create your own conventions, e.g: a func that makes sure all shared targets are "static frameworks"
 /// See https://docs.tuist.io/guides/helpers/
 
-extension Project {
-    /// Helper function to create the Project for this ExampleApp
-    public static func app(name: String, platform: Platform, additionalTargets: [String]) -> Project {
-        var targets = makeAppTargets(name: name,
-                                     platform: platform,
-                                     dependencies: additionalTargets.map { TargetDependency.target(name: $0) })
-        targets += additionalTargets.flatMap({ makeFrameworkTargets(name: $0, platform: platform) })
-        return Project(name: name,
-                       organizationName: "tnzkm",
-                       targets: targets)
+public enum AppConfiguration {
+    public static let APP_VERSION = "1.0.0"
+    public static let DEPLOYMENT_TARGET = "15.0"
+    public static let SWIFT_VERSION = "5.8"
+}
+
+public enum AppSetting {
+    public static let appName = "GongGanGam"
+    public static let bundleIdPrefix = "com.tnzkm"
+    public static let deploymentTarget: DeploymentTarget = .iOS(
+        targetVersion: AppConfiguration.DEPLOYMENT_TARGET,
+        devices: [.iphone],
+        supportsMacDesignedForIOS: false
+    )
+}
+
+public extension Project {
+    
+    static let organizationName = "tnzkm"
+    
+    static func makeProject(
+        name: String,
+        packages: [Package] = [],
+        targets: [Target]
+    ) -> Project {
+        return Project(
+            name: name,
+            organizationName: organizationName,
+            packages: packages,
+            settings: .settings(configurations: [
+                .debug(name: "Debug", xcconfig: .relativeToRoot("Config/Debug.xcconfig")),
+                .release(name: "Release", xcconfig: .relativeToRoot("Config/Release.xcconfig"))
+            ]),
+            targets: targets
+        )
     }
-
-    // MARK: - Private
-
-    /// Helper function to create a framework target and an associated unit test target
-    private static func makeFrameworkTargets(name: String, platform: Platform) -> [Target] {
-        let sources = Target(name: name,
-                platform: platform,
-                product: .framework,
-                bundleId: "com.tnzkm.\(name)",
-                infoPlist: .default,
-                sources: ["\(name)/Sources/**"],
-                resources: [],
-                scripts: [.pre(path: "Scripts/SwiftLintRunScript.sh", arguments: [], name: "SwiftLint")],
-                dependencies: [])
-//        let tests = Target(name: "\(name)Tests",
-//                platform: platform,
-//                product: .unitTests,
-//                bundleId: "io.tuist.\(name)Tests",
-//                infoPlist: .default,
-//                sources: ["Targets/\(name)/Tests/**"],
-//                resources: [],
-//                dependencies: [.target(name: name)])
-        return [sources]
+    // MARK: - DynamicFramework
+    static func makeFrameworkTarget(moduleName: String = "", targetName: String, platform: Platform, dependencies: [TargetDependency], useResources: Bool = false) -> Target {
+        
+        return Target(
+            name: moduleName + targetName,
+            platform: platform,
+            product: .framework,
+            bundleId: "\(AppSetting.bundleIdPrefix).\(moduleName)\(targetName)",
+            infoPlist: .default,
+            sources: ["Sources/**/*.swift"],
+            resources: useResources ? ["Resources/**"] : nil,
+            dependencies: dependencies
+        )
     }
-
-
-    /// Helper function to create the application target and the unit test target.
-    private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
-        let platform: Platform = platform
-        let infoPlist: [String: InfoPlist.Value] = [
-            "CFBundleShortVersionString": "1.0",
-            "CFBundleVersion": "1",
-            "UIMainStoryboardFile": "",
-            "UILaunchStoryboardName": "LaunchScreen"
-            ]
-
-        let mainTarget = Target(
+    
+    // MARK: - TestTarget
+    static func makeTestTarget(name: String, platform: Platform, dependencies: [TargetDependency]) -> Target {
+        return Target(
+            name: "\(name)Tests",
+            platform: platform,
+            product: .unitTests,
+            bundleId: AppSetting.bundleIdPrefix + ".\(name)",
+            deploymentTarget: AppSetting.deploymentTarget,
+            infoPlist: .default,
+            sources: ["./Tests/**"],
+            dependencies: dependencies
+        )
+    }
+    
+    // MARK: - StaticFramework
+    static func makeStaticFrameworkTarget(name: String, platform: Platform = .iOS, iOSTargetVersion: String, infoPlist: [String: Plist.Value] = [:] ,dependencies: [TargetDependency] = []) -> Target {
+        return Target(
+            name: name,
+            platform: platform,
+            product: .staticFramework,
+            bundleId: AppSetting.bundleIdPrefix + ".\(name)",
+            deploymentTarget: AppSetting.deploymentTarget,
+            infoPlist: .extendingDefault(with: infoPlist),
+            sources: ["Sources/**"],
+            resources: ["Resources/**"],
+            dependencies: dependencies
+        )
+    }
+    
+    // MARK: - AppTarget
+    static func makeAppTarget(name: String, platform: Platform, infoPlist: [String: Plist.Value] = [:], dependencies: [TargetDependency] = []) -> Target {
+        return Target(
             name: name,
             platform: platform,
             product: .app,
-            bundleId: "com.tnzkm.\(name)",
+            bundleId: AppSetting.bundleIdPrefix + ".\(name)",
+            deploymentTarget: AppSetting.deploymentTarget,
             infoPlist: .extendingDefault(with: infoPlist),
-            sources: ["\(name)/Sources/**"],
-            resources: ["\(name)/Resources/**"],
-            scripts: [.pre(path: "Scripts/SwiftLintRunScript.sh", arguments: [], name: "SwiftLint")],
-            dependencies: dependencies
+            sources: ["Example/Sources/**"],
+            resources: ["Example/Resources/**"],
+            dependencies: [.target(name: name)] + dependencies
         )
-
-//        let testTarget = Target(
-//            name: "\(name)Tests",
-//            platform: platform,
-//            product: .unitTests,
-//            bundleId: "io.tuist.\(name)Tests",
-//            infoPlist: .default,
-//            sources: ["Targets/\(name)/Tests/**"],
-//            dependencies: [
-//                .target(name: "\(name)")
-//        ])
-        return [mainTarget]
+    }
+    
+    static func makeAppTarget(name: String, platform: Platform, infoPlist: String, dependencies: [TargetDependency] = []) -> Target {
+        return Target(
+            name: name,
+            platform: platform,
+            product: .app,
+            bundleId: AppSetting.bundleIdPrefix + ".\(name)",
+            deploymentTarget: AppSetting.deploymentTarget,
+            infoPlist: InfoPlist(stringLiteral: infoPlist),
+            sources: ["Example/Sources/**"],
+            resources: ["Example/Resources/**"],
+            dependencies: [.target(name: name)] + dependencies
+        )
     }
 }
+
